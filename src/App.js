@@ -19,7 +19,7 @@ function App() {
 
   const fetchLoggedIn = async () => {
     try {
-      const res = await api.get("/auth")
+      const res = await api.get("/auth/check")
       if (res.status >= 200 && res.status < 300) {
         setIsAuthenticated(true);
       }
