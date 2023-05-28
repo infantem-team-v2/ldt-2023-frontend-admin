@@ -52,19 +52,60 @@ const Constants = () => {
 
   const handleSubmit = async () => {
     try {
-      const res = await api.post("account/constant", {
-        field_name: changingFieldName,
-        field_value: changingFieldValue
+      const category = constants[changingFieldCategory];
+      const field = Object.values(category).find((element) => {
+        return Object.keys(element).includes(changingFieldName);
       });
-      if (res.status >= 200 && res.status < 300) {
-        Swal.fire({
-          icon: "success",
-          title: "Успех",
-          text: "Константа успешно изменена/добавлена",
+      if (field) {
+        const res = await api.patch("account/constant", {
+          elements: [{
+            category: changingFieldCategory,
+            name: changingFieldName,
+            value: changingFieldValue,
+          }]
         });
-        fetchData();
-        setChangingFieldName("");
-        setChangingFieldValue("");
+        if (res.status >= 200 && res.status < 300) {
+          Swal.fire({
+            icon: "success",
+            title: "Успех",
+            text: "Константа успешно изменена/добавлена",
+          });
+          fetchData();
+          setChangingFieldName("");
+          setChangingFieldValue("");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Ошибка",
+            text: "Произошла ошибка при изменении константы",
+          });
+        }
+
+      } else {
+        const res = await api.post("account/constant", {
+          elements: [{
+            category: changingFieldCategory,
+            name: changingFieldName,
+            value: changingFieldValue,
+          }]
+        }
+        );
+        if (res.status >= 200 && res.status < 300) {
+          Swal.fire({
+            icon: "success",
+            title: "Успех",
+            text: "Константа успешно изменена/добавлена",
+          });
+          fetchData();
+          setChangingFieldName("");
+          setChangingFieldValue("");
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Ошибка",
+            text: "Произошла ошибка при изменении константы",
+          });
+        }
       }
     } catch (err) {
       Swal.fire({
@@ -73,6 +114,7 @@ const Constants = () => {
         text: "Произошла ошибка при изменении константы",
       });
     }
+
   }
 
   return (
@@ -138,51 +180,52 @@ const Constants = () => {
                   </div>
                 )
               })
-            } <div className="card">
-              <h2>Изменить константу</h2>
-              <p className="text-mited">
-                Введите название константы и новое значение,
-                вы можете как изменить текущее значение константы,
-                так и добавить новую константу.
-              </p>
-              <div className="row">
-                <div className="col-4">
-                  <Form.Select
-                    className="form-control"
-                    onChange={(e) => setChangingFieldCategory(e.target.value)}
-                  >
-                    {categories.map((category, index) => {
-                      return (
-                        <option value={category} key={index}>{category}</option>
-                      )
-                    })}
-                  </Form.Select>
-                </div>
-                <div className="col-4">
-                  <input
-                    className="form-control"
-                    type="text"
-                    placeholder="Название константы"
-                    value={changingFieldName}
-                    onChange={(e) => setChangingFieldName(e.target.value)}
-                  />
-                </div>
-                <div className="col-4">
-                  <input
-                    className="form-control"
-                    type="text"
-                    placeholder="Новое значение"
-                    value={changingFieldValue}
-                    onChange={(e) => setChangingFieldValue(e.target.value)}
-                  />
-                </div>
+            }
+          </div>
+          <div className="card">
+            <h2>Изменить константу</h2>
+            <p className="text-mited">
+              Введите название константы и новое значение,
+              вы можете как изменить текущее значение константы,
+              так и добавить новую константу.
+            </p>
+            <div className="row">
+              <div className="col-4">
+                <Form.Select
+                  className="form-control"
+                  onChange={(e) => setChangingFieldCategory(e.target.value)}
+                >
+                  {categories.map((category, index) => {
+                    return (
+                      <option value={category} key={index}>{category}</option>
+                    )
+                  })}
+                </Form.Select>
               </div>
-              <button
-                className="btn btn-primary mt-2"
-                type="button"
-                onClick={handleSubmit}
-              >Изменить</button>
+              <div className="col-4">
+                <input
+                  className="form-control"
+                  type="text"
+                  placeholder="Название константы"
+                  value={changingFieldName}
+                  onChange={(e) => setChangingFieldName(e.target.value)}
+                />
+              </div>
+              <div className="col-4">
+                <input
+                  className="form-control"
+                  type="text"
+                  placeholder="Новое значение"
+                  value={changingFieldValue}
+                  onChange={(e) => setChangingFieldValue(e.target.value)}
+                />
+              </div>
             </div>
+            <button
+              className="btn btn-primary mt-2"
+              type="button"
+              onClick={handleSubmit}
+            >Изменить</button>
           </div>
         </div>
       </> : <div className="alert alert-danger data m-3" role="alert">
