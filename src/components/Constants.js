@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import { nanoid } from "nanoid";
+import { Collapse } from "bootstrap";
 
 
 
 const Constants = () => {
 
   const [constants, setConstants] = useState();
-  const [fields, setFields] = useState();
+  const [fieldsCollapse, setFieldsCollapse] = useState();
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    fillFieldsCollapse();
+  }, [constants]);
 
   const fetchData = async () => {
     try {
@@ -23,6 +28,20 @@ const Constants = () => {
     } catch (err) {
       console.log(err)
     }
+  };
+
+  const handleCollapse = (field_name) => {
+    setFieldsCollapse({ ...fieldsCollapse, [field_name]: !fieldsCollapse[field_name] });
+  }
+
+  const fillFieldsCollapse = () => {
+    let fields = {};
+    if (constants) {
+      Object.entries(constants).map((element) => {
+        fields[element[0]] = false;
+      })
+    }
+    setFieldsCollapse(fields);
   };
 
 
@@ -37,22 +56,34 @@ const Constants = () => {
               return (
                 <div className="container" key={nanoid()}>
                   <h2>{element[0]}</h2>
-                  {Object.values(element[1]).map((inputs) => {
-                    return (Object.entries(inputs).map((input) => {
-                      return (
-                        <div className="row" key={nanoid()}>
-                          <div className="col-6">
-                            <h3>{input[0]}</h3>
-                          </div>
-                          <div className="col-6">
-                            <h3>{input[1]}</h3>
-                          </div>
-                        </div>
+                  <button
+                    className="btn btn-primary"
+                    type="button"
+                    onClick={() => handleCollapse(element[0])}
+                  ></button>
+                  <Collapse in={fieldsCollapse[element[0]] ? fieldsCollapse[element[0]] : false}>
+                    {Object.values(element[1]).map((inputs) => {
+                      return (Object.entries(inputs).map((input) => {
+                        return (
+                          <>{
+                            String(input[0]).includes("id") ? <></> :
+                              <div className="row" key={nanoid()}>
+                                <div className="col-6">
+                                  <p>{input[0]}</p>
+                                </div>
+                                <div className="col-6">
+                                  <p>{input[1]}</p>
+                                </div>
+                              </div>
+                          }
+                          </>
+
+                        )
+                      })
                       )
                     })
-                    )
-                  })
-                  }
+                    }
+                  </Collapse>
                 </div>
               )
             })
