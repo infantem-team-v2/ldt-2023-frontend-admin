@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
 import { nanoid } from "nanoid";
-import { Collapse } from "react-bootstrap";
+import { Collapse, Dropdown } from "react-bootstrap";
+import Swal from "sweetalert2";
 
 
 
@@ -9,6 +10,11 @@ const Constants = () => {
 
   const [constants, setConstants] = useState();
   const [fieldsCollapse, setFieldsCollapse] = useState();
+  const [changingFieldName, setChangingFieldName] = useState();
+  const [changingFieldValue, setChangingFieldValue] = useState();
+  const [changingFieldCategory, setChangingFieldCategory] = useState();
+
+  const categories = ["county_prices", "machine_prices", "mean_salaries", "other_needs", "patent_prices"]
 
   useEffect(() => {
     fetchData();
@@ -44,12 +50,36 @@ const Constants = () => {
     setFieldsCollapse(fields);
   };
 
+  const handleSubmit = async () => {
+    try {
+      const res = await api.post("account/constant", {
+        field_name: changingFieldName,
+        field_value: changingFieldValue
+      });
+      if (res.status >= 200 && res.status < 300) {
+        Swal.fire({
+          icon: "success",
+          title: "Успех",
+          text: "Константа успешно изменена/добавлена",
+        });
+        fetchData();
+        setChangingFieldName("");
+        setChangingFieldValue("");
+      }
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Ошибка",
+        text: "Произошла ошибка при изменении константы",
+      });
+    }
+  }
 
   return (
     <>
       {constants ? <>
-        <div className="container">
-          <h1 className="text-center">Константы</h1>
+        <div className="container" >
+
           <div className="d-flex justify-content-between">
             <a href='https://metrics.ldt2023.infantem.tech/d/6bnfeorMz/service-metrics?orgId=1&refresh=10s'
               target="_blank"
@@ -63,47 +93,97 @@ const Constants = () => {
               <p>password: 8JK-qR5-eCh-u3y</p>
             </div>
           </div>
-
-          {
-            Object.entries(constants).map((element) => {
-              return (
-                <div className="container" key={nanoid()}>
-                  <h2>{element[0]}</h2>
-                  <button
-                    className="btn btn-primary"
-                    type="button"
-                    onClick={() => handleCollapse(element[0])}
-                  >{fieldsCollapse[element[0]] ? "Скрыть ⥣ " : "Показать ⥥"}</button>
-                  <Collapse in={fieldsCollapse[element[0]] ? fieldsCollapse[element[0]] : false}>
-                    <div className="div-collapsed-admin">
-                      {Object.values(element[1]).map((inputs) => {
-                        return (Object.entries(inputs).map((input) => {
+          <h1 className="text-center">Константы</h1>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+          }}>
+            {
+              Object.entries(constants).map((element) => {
+                return (
+                  <div className="container" key={nanoid()}>
+                    <h2>{element[0]}</h2>
+                    <button
+                      className="btn btn-primary mb-2"
+                      type="button"
+                      onClick={() => handleCollapse(element[0])}
+                    >{fieldsCollapse[element[0]] ? "Скрыть ⥣ " : "Показать ⥥"}</button>
+                    <Collapse in={fieldsCollapse[element[0]] ? fieldsCollapse[element[0]] : false}>
+                      <div className="div-collapsed-admin">
+                        {Object.values(element[1]).map((inputs) => {
                           return (
-                            <div className="border-bottom">{
-                              String(input[0]).includes("id") ? <></> :
-                                <div className="row" key={nanoid()}>
-                                  <div className="col-6">
-                                    <p>{input[0]}</p>
-                                  </div>
-                                  <div className="col-6">
-                                    <p>{input[1]}</p>
-                                  </div>
-                                </div>
+                            <div className="border-bottom">{Object.entries(inputs).map((input) => {
+                              return (
+                                <>{
+                                  String(input[0]).includes("id") ? <></> :
+                                    <div className="row" key={nanoid()}>
+                                      <div className="col-6">
+                                        <p>{input[0]}</p>
+                                      </div>
+                                      <div className="col-6">
+                                        <p>{input[1]}</p>
+                                      </div>
+                                    </div>
 
-                            }
-                            </div>
+                                }
+                                </>
 
+                              )
+                            })}</div>
                           )
                         })
-                        )
-                      })
-                      }
-                    </div>
-                  </Collapse>
+                        }
+                      </div>
+                    </Collapse>
+                  </div>
+                )
+              })
+            } <div className="card">
+              <h2>Изменить константу</h2>
+              <p className="text-mited">
+                Введите название константы и новое значение,
+                вы можете как изменить текущее значение константы,
+                так и добавить новую константу.
+              </p>
+              <div className="row">
+                <div className="col-4">
+                  <Form.Select
+                    className="form-control"
+                    onChange={(e) => setChangingFieldCategory(e.target.value)}
+                  >
+                    {categories.map((category, index) => {
+                      return (
+                        <option value={category} key={index}>{category}</option>
+                      )
+                    })}
+                  </Form.Select>
                 </div>
-              )
-            })
-          }
+                <div className="col-4">
+                  <input
+                    className="form-control"
+                    type="text"
+                    placeholder="Название константы"
+                    value={changingFieldName}
+                    onChange={(e) => setChangingFieldName(e.target.value)}
+                  />
+                </div>
+                <div className="col-4">
+                  <input
+                    className="form-control"
+                    type="text"
+                    placeholder="Новое значение"
+                    value={changingFieldValue}
+                    onChange={(e) => setChangingFieldValue(e.target.value)}
+                  />
+                </div>
+              </div>
+              <button
+                className="btn btn-primary mt-2"
+                type="button"
+                onClick={handleSubmit}
+              >Изменить</button>
+            </div>
+          </div>
         </div>
       </> : <div className="alert alert-danger data m-3" role="alert">
         Произошла ошибка при загрузке результатов.
