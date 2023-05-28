@@ -18,6 +18,7 @@ const Constants = () => {
       const res = await api.get("account/constant");
       if (res.status >= 200 && res.status < 300) {
         setConstants(res.data);
+        console.log(res.data)
       }
     } catch (err) {
       console.log(err)
@@ -32,10 +33,12 @@ const Constants = () => {
           <h1 className="text-center">Константы</h1>
           {
             Object.entries(constants).map((element) => {
+              console.log("ELEMENT1", element)
               return (
                 <div className="container" key={nanoid()}>
                   <h2>{element[0]}</h2>
                   {Object.entries(element[1]).map((inputs) => {
+                    console.log("INPUTS", inputs)
                     return (
                       <div className="row" key={nanoid()}>
                         <div className="col-6">
