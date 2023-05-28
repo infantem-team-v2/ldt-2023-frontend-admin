@@ -14,6 +14,8 @@ const Constants = () => {
   const [changingFieldValue, setChangingFieldValue] = useState();
   const [changingFieldCategory, setChangingFieldCategory] = useState();
 
+  const [isLoaded, setIsLoaded] = useState(false);
+
   const categories = ["county_prices", "machine_prices", "mean_salaries", "other_needs", "patent_prices"]
 
   useEffect(() => {
@@ -23,6 +25,12 @@ const Constants = () => {
   useEffect(() => {
     fillFieldsCollapse();
   }, [constants]);
+
+  useEffect(() => {
+    if (constants && fieldsCollapse) {
+      setIsLoaded(true);
+    }
+  }, [constants, fieldsCollapse]);
 
   const fetchData = async () => {
     try {
@@ -119,7 +127,7 @@ const Constants = () => {
 
   return (
     <>
-      {constants ? <>
+      {isLoaded ? constants ? <>
         <div className="container" >
 
           <div className="d-flex justify-content-between">
@@ -182,7 +190,7 @@ const Constants = () => {
               })
             }
           </div>
-          <div className="card">
+          <div className="card p-3 mb-4">
             <h2>Изменить константу</h2>
             <p className="text-mited">
               Введите название константы и новое значение,
@@ -230,7 +238,14 @@ const Constants = () => {
         </div>
       </> : <div className="alert alert-danger data m-3" role="alert">
         Произошла ошибка при загрузке результатов.
-      </div>}
+      </div> :
+        // spinner
+        <div className="d-flex justify-content-center">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      }
     </>
   )
 };
