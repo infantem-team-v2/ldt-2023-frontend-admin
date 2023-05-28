@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import Swal from 'sweetalert2';
 
-const AdminForm = () => {
+const AdminForm = ({ setIsAuthenticated }) => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
 
@@ -31,7 +31,8 @@ const AdminForm = () => {
           text: 'Вы вошли в систему!',
         }
         ).then(() => {
-          navigate('/')
+          setIsAuthenticated(true);
+          navigate('/');
         })
       }
     } catch (err) {

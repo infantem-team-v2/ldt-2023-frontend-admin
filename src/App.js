@@ -30,7 +30,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path='/auth' element={<AdminForm />} />
+        <Route path='/auth' element={<AdminForm setIsAuthenticated={setIsAuthenticated} />} />
         <Route path='/' element={<PrivateRoute auth={isAuthenticated}><h1>HOME</h1></PrivateRoute>} />
       </Routes>
     </>
