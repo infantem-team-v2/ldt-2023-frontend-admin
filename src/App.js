@@ -1,5 +1,5 @@
 import './App.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import AdminForm from './components/AdminForm';
 import { useState, useEffect } from 'react';
