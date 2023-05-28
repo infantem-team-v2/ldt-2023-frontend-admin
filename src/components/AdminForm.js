@@ -46,7 +46,7 @@ const AdminForm = ({ setIsAuthenticated }) => {
   }
 
   return (
-    <div className='contaner-md position-absolute top-50 start-50 translate-middle w-25' >
+    <div className='contaner-md position-absolute top-50 start-50 translate-middle' >
       <Form
         onSubmit={handleSubmit}
         className='p-5 border border-primary rounded-3 shadow-lg bg-white'
