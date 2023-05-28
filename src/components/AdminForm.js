@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 import api from '../services/api';
 import Swal from 'sweetalert2';
@@ -8,21 +9,36 @@ const AdminForm = () => {
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
 
+  const navigate = useNavigate();
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    fetchData();
   };
+
 
   const fetchData = async () => {
     try {
-      const res = await api.post("/auth", {
-        login: login,
+      const res = await api.post("/auth/sign/in", {
+        email: login,
         password: password
       });
       if (res.status >= 200 && res.status < 300) {
-        Swal.fire();
+        Swal.fire({
+          icon: 'success',
+          title: 'Успешно!',
+          text: 'Вы вошли в систему!',
+        }
+        ).then(() => {
+          navigate('/')
+        })
       }
     } catch (err) {
-      Swal.fire();
+      Swal.fire(
+        'Ошибка!',
+        'Неверный логин или пароль!',
+      );
     }
 
 
