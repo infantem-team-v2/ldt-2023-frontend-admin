@@ -62,27 +62,29 @@ const Constants = () => {
                     onClick={() => handleCollapse(element[0])}
                   ></button>
                   <Collapse in={fieldsCollapse[element[0]] ? fieldsCollapse[element[0]] : false}>
-                    {Object.values(element[1]).map((inputs) => {
-                      return (Object.entries(inputs).map((input) => {
-                        return (
-                          <>{
-                            String(input[0]).includes("id") ? <></> :
-                              <div className="row" key={nanoid()}>
-                                <div className="col-6">
-                                  <p>{input[0]}</p>
+                    <div className="div-collapsed-admin">
+                      {Object.values(element[1]).map((inputs) => {
+                        return (Object.entries(inputs).map((input) => {
+                          return (
+                            <>{
+                              String(input[0]).includes("id") ? <></> :
+                                <div className="row" key={nanoid()}>
+                                  <div className="col-6">
+                                    <p>{input[0]}</p>
+                                  </div>
+                                  <div className="col-6">
+                                    <p>{input[1]}</p>
+                                  </div>
                                 </div>
-                                <div className="col-6">
-                                  <p>{input[1]}</p>
-                                </div>
-                              </div>
-                          }
-                          </>
+                            }
+                            </>
 
+                          )
+                        })
                         )
                       })
-                      )
-                    })
-                    }
+                      }
+                    </div>
                   </Collapse>
                 </div>
               )
