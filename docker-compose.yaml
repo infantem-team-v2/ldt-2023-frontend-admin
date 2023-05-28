@@ -10,7 +10,7 @@ services:
       - .env
     
     restart: unless-stopped
-    container_name: landing-frontend
+    container_name: admin-frontend
 
     ports:
       - ${EXIT_PORT}:3000
