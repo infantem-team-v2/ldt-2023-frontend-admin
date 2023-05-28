@@ -6,9 +6,9 @@ import { useState, useEffect } from 'react';
 import api from './services/api';
 import ConsolePage from './components/ConsolePage';
 
-// const PrivateRoute = ({ auth: { isAuthenticated }, children }) => {
-//   return isAuthenticated ? children : <Navigate to="/auth" />;
-// };
+const PrivateRoute = ({ auth: { isAuthenticated }, children }) => {
+  return isAuthenticated ? children : <Navigate to="/auth" />;
+};
 
 function App() {
 
@@ -32,7 +32,7 @@ function App() {
     <>
       <Routes>
         <Route path='/auth' element={<AdminForm setIsAuthenticated={setIsAuthenticated} />} />
-        <Route path='/' element={<ConsolePage />} />
+        <Route path='/' element={<PrivateRoute auth={isAuthenticated}> <ConsolePage /></PrivateRoute>} />
       </Routes>
     </>
   );
