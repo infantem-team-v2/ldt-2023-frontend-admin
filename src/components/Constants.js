@@ -31,18 +31,18 @@ const Constants = () => {
         <div className="container">
           <h1 className="text-center">Константы</h1>
           {
-            Object.entries(constants).map(([key, value]) => {
+            Object.entries(constants).map((element) => {
               return (
                 <div className="container" key={nanoid()}>
-                  <h2>{key}</h2>
-                  {Object.entries(value).map(([key, value]) => {
+                  <h2>{element[0]}</h2>
+                  {Object.entries(element[1]).map((inputs) => {
                     return (
                       <div className="row" key={nanoid()}>
                         <div className="col-6">
-                          <h3>{key}</h3>
+                          <h3>{inputs[0]}</h3>
                         </div>
                         <div className="col-6">
-                          <h3>{value}</h3>
+                          <h3>{inputs[1]}</h3>
                         </div>
                       </div>
                     )
