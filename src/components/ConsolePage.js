@@ -1,4 +1,5 @@
 
+import { Navigate } from "react-router-dom";
 import Constants from "./Constants";
 const ConsolePage = ({ auth }) => {
 
