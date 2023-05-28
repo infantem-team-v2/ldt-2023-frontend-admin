@@ -16,7 +16,7 @@ function App() {
 
   useEffect(() => {
     fetchLoggedIn()
-  }, [isAuthenticated]);
+  }, []);
 
   const fetchLoggedIn = async () => {
     try {
