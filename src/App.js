@@ -12,7 +12,7 @@ const PrivateRoute = ({ auth: { isAuthenticated }, children }) => {
 
 function App() {
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState();
 
   useEffect(() => {
     api.get("/auth/check").then(res => {
@@ -21,6 +21,7 @@ function App() {
       }
     }
     ).catch(err => {
+      console.log(err);
       setIsAuthenticated(false);
     }
     )
