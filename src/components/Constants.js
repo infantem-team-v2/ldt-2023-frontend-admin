@@ -51,10 +51,13 @@ const Constants = () => {
         <div className="container">
           <h1 className="text-center">Константы</h1>
           <div className="d-flex justify-content-between">
-            <a href='https://metrics.ldt2023.infantem.tech/d/6bnfeorMz/service-metrics?orgId=1&refresh=10s'>
+            <a href='https://metrics.ldt2023.infantem.tech/d/6bnfeorMz/service-metrics?orgId=1&refresh=10s'
+              target="_blank"
+              rel="noreferrer"
+            >
               <h2 className="h2">Ссылка на метрики  ➚ </h2>
             </a>
-            <div className="card">
+            <div className="card p-4">
               <h2>Данные вашего аккаунта метрик</h2>
               <p>login: KlenoviySirop</p>
               <p>password: 8JK-qR5-eCh-u3y</p>
@@ -76,7 +79,7 @@ const Constants = () => {
                       {Object.values(element[1]).map((inputs) => {
                         return (Object.entries(inputs).map((input) => {
                           return (
-                            <>{
+                            <div className="border-bottom">{
                               String(input[0]).includes("id") ? <></> :
                                 <div className="row" key={nanoid()}>
                                   <div className="col-6">
@@ -86,8 +89,9 @@ const Constants = () => {
                                     <p>{input[1]}</p>
                                   </div>
                                 </div>
+
                             }
-                            </>
+                            </div>
 
                           )
                         })
