@@ -37,19 +37,22 @@ const Constants = () => {
               return (
                 <div className="container" key={nanoid()}>
                   <h2>{element[0]}</h2>
-                  {Object.entries(element[1]).map((inputs) => {
-                    console.log("INPUTS", inputs)
-                    return (
-                      <div className="row" key={nanoid()}>
-                        <div className="col-6">
-                          <h3>{inputs[0]}</h3>
+                  {Object.values(element[1]).map((inputs) => {
+                    return (Object.entries(inputs).map((input) => {
+                      return (
+                        <div className="row" key={nanoid()}>
+                          <div className="col-6">
+                            <h3>{input[0]}</h3>
+                          </div>
+                          <div className="col-6">
+                            <h3>{input[1]}</h3>
+                          </div>
                         </div>
-                        <div className="col-6">
-                          <h3>{inputs[1]}</h3>
-                        </div>
-                      </div>
+                      )
+                    })
                     )
-                  })}
+                  })
+                  }
                 </div>
               )
             })
