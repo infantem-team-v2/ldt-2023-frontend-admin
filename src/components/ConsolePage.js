@@ -1,13 +1,16 @@
 
+import { Navigate } from "react-router-dom";
 import Constants from "./Constants";
-const ConsolePage = () => {
+const ConsolePage = ({ auth }) => {
 
-
+  console.log(auth);
   return (
-    <div>
-      <h1>Console Page</h1>
-      <Constants />
-    </div>
+    <>{
+      auth ? <Constants /> : <Navigate to="/auth" />
+
+    }
+    </>
+
   );
 };
 
