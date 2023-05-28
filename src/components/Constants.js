@@ -50,9 +50,19 @@ const Constants = () => {
       {constants ? <>
         <div className="container">
           <h1 className="text-center">Константы</h1>
+          <div className="d-flex justify-content-between">
+            <a href='https://metrics.ldt2023.infantem.tech/d/6bnfeorMz/service-metrics?orgId=1&refresh=10s'>
+              <h2 className="h2">Ссылка на метрики  ➚ </h2>
+            </a>
+            <div className="card">
+              <h2>Данные вашего аккаунта метрик</h2>
+              <p>login: KlenoviySirop</p>
+              <p>password: 8JK-qR5-eCh-u3y</p>
+            </div>
+          </div>
+
           {
             Object.entries(constants).map((element) => {
-              console.log("ELEMENT1", element)
               return (
                 <div className="container" key={nanoid()}>
                   <h2>{element[0]}</h2>
@@ -60,7 +70,7 @@ const Constants = () => {
                     className="btn btn-primary"
                     type="button"
                     onClick={() => handleCollapse(element[0])}
-                  ></button>
+                  >{fieldsCollapse[element[0]] ? "Скрыть ⥣ " : "Показать ⥥"}</button>
                   <Collapse in={fieldsCollapse[element[0]] ? fieldsCollapse[element[0]] : false}>
                     <div className="div-collapsed-admin">
                       {Object.values(element[1]).map((inputs) => {
